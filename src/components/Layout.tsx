@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
@@ -13,6 +13,7 @@ import LoadingSpinner from './LoadingSpinner';
 const Layout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const { isLoading: billingLoading } = useBilling();
   const { isLoading: inventoryLoading } = useInventory();
   const { isLoading: salesLoading } = useSales();
@@ -23,6 +24,11 @@ const Layout: React.FC = () => {
   useEffect(() => {
     setSidebarOpen(false);
   }, [location.pathname]);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(96,165,250,0.18),_transparent_28%),linear-gradient(180deg,_#f8fafc_0%,_#eef6ff_100%)] text-slate-900 lg:flex">
@@ -72,7 +78,7 @@ const Layout: React.FC = () => {
                   <button
                     type="button"
                     className="w-full rounded-2xl px-3 py-2 text-left text-sm text-slate-700 transition duration-200 hover:bg-slate-50"
-                    onClick={() => logout()}
+                    onClick={handleLogout}
                   >
                     Cerrar sesión
                   </button>

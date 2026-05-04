@@ -8,6 +8,9 @@ import Ventas from './pages/Ventas';
 import Clientes from './pages/Clientes';
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
+import { InventoryProvider } from './context/InventoryContext';
+import { BillingProvider } from './context/BillingContext';
+import { SalesProvider } from './context/SalesContext';
 
 const App: React.FC = () => {
   return (
@@ -18,7 +21,13 @@ const App: React.FC = () => {
         path="/"
         element={
           <ProtectedRoute>
-            <Layout />
+            <BillingProvider>
+              <InventoryProvider>
+                <SalesProvider>
+                  <Layout />
+                </SalesProvider>
+              </InventoryProvider>
+            </BillingProvider>
           </ProtectedRoute>
         }
       >
