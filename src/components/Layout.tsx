@@ -5,12 +5,20 @@ import Sidebar from './Sidebar';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
 import PageTransition from './PageTransition';
+import { useBilling } from '../context/BillingContext';
+import { useInventory } from '../context/InventoryContext';
+import { useSales } from '../context/SalesContext';
+import LoadingSpinner from './LoadingSpinner';
 
 const Layout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user, logout } = useAuth();
+  const { isLoading: billingLoading } = useBilling();
+  const { isLoading: inventoryLoading } = useInventory();
+  const { isLoading: salesLoading } = useSales();
   const { notifications, dismiss } = useNotification();
   const location = useLocation();
+  const isPageLoading = billingLoading || inventoryLoading || salesLoading;
 
   useEffect(() => {
     setSidebarOpen(false);
@@ -84,6 +92,12 @@ const Layout: React.FC = () => {
           </div>
         </main>
       </div>
+
+      {isPageLoading && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-white/75 backdrop-blur-sm">
+          <LoadingSpinner message="Sincronizando datos desde Supabase..." />
+        </div>
+      )}
 
       <div className="pointer-events-none fixed right-4 top-4 z-50 space-y-2">
         {notifications.map(notification => (

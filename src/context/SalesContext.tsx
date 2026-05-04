@@ -37,6 +37,8 @@ type SalesContextType = {
   previousMonthTotal: number;
   currentMonthOrders: SalesOrder[];
   todaysOrders: SalesOrder[];
+  isLoading: boolean;
+  error: string | null;
   addOrders: (orders: Omit<SalesOrder, 'id'>[]) => void;
   addDirectSale: (
     sale: Omit<DirectCustomer, 'historialPedidos' | 'montoTotalHistorico'> & {
@@ -274,6 +276,8 @@ export const SalesProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     previousMonthTotal,
     currentMonthOrders,
     todaysOrders,
+    isLoading: loading,
+    error,
     addOrders,
     addDirectSale,
   };

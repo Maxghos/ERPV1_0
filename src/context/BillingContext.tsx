@@ -35,6 +35,8 @@ type BillingContextType = {
   overdueInvoices: Invoice[];
   dueThisWeekCount: number;
   overdueCount: number;
+  isLoading: boolean;
+  error: string | null;
   updateInvoiceNotes: (id: number, notes: string) => void;
   addInvoice: (invoice: Omit<Invoice, 'id'>) => void;
 };
@@ -179,6 +181,8 @@ export const BillingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     overdueInvoices,
     dueThisWeekCount: alertsDueThisWeek.length,
     overdueCount: overdueInvoices.length,
+    isLoading: loading,
+    error,
     updateInvoiceNotes,
     addInvoice,
   };

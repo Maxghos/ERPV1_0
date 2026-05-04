@@ -52,6 +52,8 @@ type InventoryContextType = {
   suppliers: Supplier[];
   lowStockProducts: Product[];
   lowStockCount: number;
+  isLoading: boolean;
+  error: string | null;
   addMovement: (movement: Omit<Movement, 'id'>) => void;
   addProducts: (items: Product[]) => void;
   updateProduct: (id: number, patch: Partial<Product>) => void;
@@ -367,6 +369,8 @@ export const InventoryProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     suppliers,
     lowStockProducts,
     lowStockCount,
+    isLoading: loading,
+    error,
     addMovement,
     addProducts,
     updateProduct,

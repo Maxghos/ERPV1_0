@@ -11,6 +11,7 @@ type User = {
 type AuthContextType = {
   user: User | null;
   token: string | null;
+  isLoading: boolean;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
 };
@@ -18,6 +19,7 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType>({
   user: null,
   token: null,
+  isLoading: true,
   login: async () => false,
   logout: () => {},
 });
@@ -38,11 +40,13 @@ function generateFakeJWT(user: User) {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const t = localStorage.getItem(STORAGE_KEY);
     const u = localStorage.getItem(STORAGE_USER);
+
     if (t && u) {
       try {
         setToken(t);
@@ -52,6 +56,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         localStorage.removeItem(STORAGE_USER);
       }
     }
+    setIsLoading(false);
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -79,7 +84,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, token, isLoading, login, logout }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 
